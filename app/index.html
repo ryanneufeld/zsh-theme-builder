@@ -12,23 +12,48 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        
+
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="components/jquery-ui/themes/base/jquery-ui.css">
+        <style>
+        #red, #green, #blue, #weight {
+            float: left;
+            clear: left;
+            width: 300px;
+            margin: 15px;
+        }
+        #swatch {
+            width: 120px;
+            height: 100px;
+            margin-top: 18px;
+            margin-left: 350px;
+            background-image: none;
+            background-color: rgb(127,127,127);
+        }
+        #red   .ui-slider-range  { background: #ef2929; }
+        #red   .ui-slider-handle { border-color: #ef2929; }
+        #green .ui-slider-range  { background: #8ae234; }
+        #green .ui-slider-handle { border-color: #8ae234; }
+        #blue  .ui-slider-range  { background: #729fcf; }
+        #blue  .ui-slider-handle { border-color: #729fcf; }
+        </style>
         <script src="scripts/vendor/modernizr.min.js"></script>
     </head>
     <body>
     <div class="container" style="margin-top:50px">
-        <div class="hero-unit">
-            <h1>Wotcha!</h1>
-            <p>You now have</p>
-            <ul>
-                <li>HTML5 Boilerplate</li>
-                <li>Twitter Bootstrap</li>
-                <li>Twitter Bootstrap plugins</li>
-                <li>RequireJS</li>
-            </ul>
-            <p>installed.</p>
-            <h3>Enjoy coding! - Yeoman</h3>
+        <div id="terminal">
+            <p id="prompt"><span class='user'>ryan</span>@<span class='host'>lisa</span> <span class='cwd'>~/workspace</span>$</p>
+        </div>
+        <div>
+            <div id="red"></div>
+            <div id="green"></div>
+            <div id="blue"></div>
+            <div id="weight">
+                <input type='radio' name='weight' id='weight_normal' value='0' checked="checked" /><label for='weight_normal'>Normal</label>
+                <input type='radio' name='weight' id='weight_bold' value='1' /><label for='weight_bold'>bold</label>
+            </div>
+
+            <div id="swatch" class="ui-widget-content ui-corner-all"></div>
         </div>
     </div>
 
@@ -38,19 +63,19 @@
 
         <!-- Add your site or application content here -->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="scripts/vendor/jquery.min.js"><\/script>')</script>
-        
-        
+
+
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
+        //     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+        //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        //     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        //     s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
-    
+
     <!-- build:js scripts/plugins.js -->
     <script src="scripts/vendor/bootstrap/bootstrap-affix.js"></script>
     <script src="scripts/vendor/bootstrap/bootstrap-alert.js"></script>
@@ -65,10 +90,78 @@
     <script src="scripts/vendor/bootstrap/bootstrap-scrollspy.js"></script>
     <script src="scripts/vendor/bootstrap/bootstrap-collapse.js"></script>
     <script src="scripts/vendor/bootstrap/bootstrap-tab.js"></script>
+    <script src="components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="components/jquery-color/jquery.color.js"></script>
     <!-- endbuild -->
 
     <!-- build:js scripts/amd-app.js -->
     <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
     <!-- endbuild -->
+
+    <script>
+        var $element = $('.user');
+        function hexFromRGB(r, g, b) {
+            var hex = [
+                r.toString( 16 ),
+                g.toString( 16 ),
+                b.toString( 16 )
+            ];
+            $.each( hex, function( nr, val ) {
+                if ( val.length === 1 ) {
+                    hex[ nr ] = "0" + val;
+                }
+            });
+            return hex.join( "" ).toUpperCase();
+        }
+        function refreshSwatch() {
+            var red = $( "#red" ).slider( "value" ),
+                green = $( "#green" ).slider( "value" ),
+                blue = $( "#blue" ).slider( "value" ),
+                hex = hexFromRGB( red, green, blue );
+            colors = $.Color($element, "color").rgba();
+            $element.is('p') && $element.css( "background-color", "#" + hex );
+            $element.is('span') && $element.css( "color", "#" + hex );
+            $('#swatch').css( "background-color", "#" + hex );
+        }
+        function refreshBold(){
+            if($(this).val() === '1')
+            {
+                $element.css('font-weight','bold');
+            }
+            else
+            {
+                $element.css('font-weight','normal');
+            }
+        }
+
+
+        $(function() {
+            var colors = $.Color($element, "color").rgba();
+            $( "#red, #green, #blue" ).slider({
+                orientation: "horizontal",
+                range: "min",
+                max: 255,
+                value: 0,
+                slide: refreshSwatch,
+                change: refreshSwatch
+            });
+
+            $( "#weight" ).find('input').click(refreshBold).end().buttonset();
+
+            $('#prompt').find('span').click(function(){
+                $element = $(this);
+
+                $( "#red" ).slider( "value", colors[0] );
+                $( "#green" ).slider( "value", colors[1] );
+                $( "#blue" ).slider( "value", colors[2] );
+            });
+
+
+            $( "#red" ).slider( "value", colors[0] );
+            $( "#green" ).slider( "value", colors[1] );
+            $( "#blue" ).slider( "value", colors[2] );
+
+        });
+    </script>
 </body>
 </html>
