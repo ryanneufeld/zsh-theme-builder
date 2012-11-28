@@ -1,1 +1,43 @@
 @import "compass_twitter_bootstrap";
+
+#fg, #bg {
+    /*float: left;*/
+    /*clear: left;*/
+    width: 80%;
+    margin: 15px 0;
+}
+
+#swatch {
+    width: 120px;
+    height: 100px;
+    margin-top: 18px;
+    margin-left: 350px;
+    background-image: none;
+    background-color: rgba(255,255,255,1);
+}
+
+#terminal {
+    width: 80%;
+    height: 200px;
+    background-color: #000;
+    color: #fff;
+    position: relative;
+    padding: 1em 0;
+    margin: 0;
+}
+
+#terminal {
+    outline: 1px solid black;
+}
+ #prompt span {
+    cursor: pointer;
+}
+
+#terminal #prompt {
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    height: 1.2em;
+}
+
