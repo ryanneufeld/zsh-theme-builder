@@ -29,6 +29,8 @@
 }
  #prompt span {
     cursor: pointer;
+    font-size: 4em;
+    font-family: monospace;
 }
 
 #terminal #prompt {
@@ -36,6 +38,5 @@
     bottom: 0;
     padding: 0;
     margin: 0;
-    height: 1.2em;
 }
 
