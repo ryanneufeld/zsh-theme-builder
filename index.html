@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="styles/main.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+        <script src="scripts/colors.js"></script>
+    </head>
+    <body>
+
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+    <![endif]-->
+
+    <div class="container" style="margin-top:50px">
+        <div id="terminal">
+            <p id="prompt">
+                <span class='user'>ryan</span>&nbsp;<span>@</span>&nbsp;<span class='host'>lisa</span>&nbsp;<span class='cwd'>~/workspace</span>&nbsp;<span class='prompt-char'>$</span>
+            </p>
+        </div>
+        <div>
+            <div id="fg"></div>
+            <div id="bg"></div>
+            <div id="weight">
+                <input type='radio' name='weight' id='weight_normal' value='0' checked="checked" /><label for='weight_normal'>Normal</label>
+                <input type='radio' name='weight' id='weight_bold' value='1' /><label for='weight_bold'>bold</label>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+    //     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    //     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    //     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    //     s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+
+  <script>
+  var $element = $('.user');
+
+    function hexFromRGB(r, g, b) {
+        var hex = [
+            r.toString( 16 ),
+            g.toString( 16 ),
+            b.toString( 16 )
+        ];
+        $.each( hex, function( nr, val ) {
+            if ( val.length === 1 ) {
+                hex[ nr ] = "0" + val;
+            }
+        });
+        return hex.join( "" ).toUpperCase();
+    }
+
+    function updateFgColor() {
+        var color = $( "#fg" ).slider( "value" );
+        $element.css( "color", colors[color] ).data('fgcolor', color);
+        console.log(color);
+    }
+
+    function updateBgColor() {
+        var color = $( "#bg" ).slider( "value" );
+        $element.css( "background-color", colors[color] ).data('bgcolor', color);
+        console.log(color);
+    }
+
+
+    function refreshBold(){
+        if($(this).val() === '1')
+        {
+            $element.css('font-weight','bold');
+        }
+        else
+        {
+            $element.css('font-weight','normal');
+        }
+    }
+
+    $(function() {
+        $( "#fg" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            max: 15,
+            min: 0,
+            step: 1,
+            values: colors,
+            slide: updateFgColor,
+            change: updateFgColor
+        });
+
+        $( "#bg" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            max: 15,
+            min: 0,
+            step: 1,
+            values: colors,
+            slide: updateBgColor,
+            change: updateBgColor
+        });
+
+        $( "#weight" ).find('input').click(refreshBold).end().buttonset();
+
+        $( '#prompt > span, #terminal' ).click(function(e){
+            var currFgColor = 15, currBgColor = 0;
+
+            $element = $(e.target);
+
+            currFgColor = $element.data('fgcolor') || currFgColor;
+            currBgColor = $element.data('bgcolor') || currBgColor;
+
+            $( "#fg" ).slider( "value", currFgColor );
+            $( "#bg" ).slider( "value", currBgColor );
+        });
+    });
+    </script>
+</body>
+</html>
+
+
