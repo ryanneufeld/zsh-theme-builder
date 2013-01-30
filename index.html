@@ -68,16 +68,16 @@
 
     function updateFgColor( event, ui ) {
         console.log( event, ui );
-        var color = $( "#fg" ).slider( "value" );
-        $element.css( "color", colors[color] ).data('fgcolor', color);
-        console.log(color);
+        // var color = $( "#fg" ).slider( "value" );
+        $element.css( "color", colors[ui.value] ).data('fgcolor', ui.value);
+        // console.log(color);
     }
 
     function updateBgColor( event, ui ) {
         console.log( event, ui );
-        var color = $( "#bg" ).slider( "value" );
-        $element.css( "background-color", colors[color] ).data('bgcolor', color);
-        console.log(color);
+        // var color = $( "#bg" ).slider( "value" );
+        $element.css( "background-color", colors[ui.value] ).data('bgcolor', ui.value);
+        // console.log(color);
     }
 
 
